@@ -1,5 +1,9 @@
 Changelog
 
+1.16.0.10
+	Thanks to github user @ManuelOtaiza
+		Fix null reference exception when ReStock 1.1.x is present
+
 1.16.0.9
 	Added AssemblyFileVersion
 	Updated version file for 1.12
