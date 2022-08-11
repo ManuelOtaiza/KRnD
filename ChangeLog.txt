@@ -1,5 +1,14 @@
 Changelog
 
+1.16.0.13 
+	Thanks to @tgerland for providing a small update for the blacklist, to block Universal Storage 2
+
+1.16.0.12
+	Added another check for duplicated converter
+
+1.16.0.11
+	Added checks for duplicated resources in parts
+
 1.16.0.10
 	Thanks to github user @ManuelOtaiza
 		Fix null reference exception when ReStock 1.1.x is present

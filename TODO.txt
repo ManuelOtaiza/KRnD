@@ -1,0 +1,2 @@
+1.  Window at startup to show blacklisted parts and reason
+2.  Possibly show error 

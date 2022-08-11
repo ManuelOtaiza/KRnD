@@ -58,7 +58,7 @@ namespace KRnD
                 variantBaseMass = part.baseVariant.Mass;
             }
             if (kRnDVariants != null)
-                hasVariants = true;            
+                hasVariants = true;
             else
             {
                 currentVariantMass = 0;
@@ -86,7 +86,13 @@ namespace KRnD
                     for (int i5 = 0; i5 < engineModule.atmosphereCurve.Curve.length; i5++)
                     {
                         Keyframe frame = engineModule.atmosphereCurve.Curve[i5];
-                        atmosphereCurve.Add(frame.time, frame.value);
+                        try
+                        {
+                            atmosphereCurve.Add(frame.time, frame.value);
+                        } catch (Exception ex)
+                        {
+                            Log.Error("Duplicate time (1) found when adding atmosphereCurve, part: " + part.partInfo.title + ", frame.time: " + frame.time);
+                        }
                     }
                     this.atmosphereCurves.Add(atmosphereCurve);
                 }
@@ -101,7 +107,14 @@ namespace KRnD
                 for (int i = 0; i < rcsModule.atmosphereCurve.Curve.length; i++)
                 {
                     Keyframe frame = rcsModule.atmosphereCurve.Curve[i];
-                    atmosphereCurve.Add(frame.time, frame.value);
+                    try
+                    {
+                        atmosphereCurve.Add(frame.time, frame.value);
+                    } catch (Exception ex)
+                    {
+                        Log.Error("Duplicate time (2) found when adding atmosphereCurve, part: " + part.partInfo.title + ", frame.time: " + frame.time);
+                    }
+
                 }
                 this.atmosphereCurves.Add(atmosphereCurve);
             }
@@ -156,8 +169,11 @@ namespace KRnD
                 for (int i = 0; i < generator.resHandler.outputResources.Count; i++)
                 {
                     ModuleResource outputResource = generator.resHandler.outputResources[i];
+                    if (!generatorEfficiency.ContainsKey(outputResource.name))
+                        generatorEfficiency.Add(outputResource.name, outputResource.rate);
+                    else
+                        ShowError(part, "outputResource", outputResource.name);
 
-                    generatorEfficiency.Add(outputResource.name, outputResource.rate);
                 }
             }
 
@@ -181,9 +197,16 @@ namespace KRnD
                     {
                         ResourceRatio resourceRatio = converter.outputList[i2];
 
-                        thisConverterEfficiency.Add(resourceRatio.ResourceName, resourceRatio.Ratio);
+                        if (!thisConverterEfficiency.ContainsKey(resourceRatio.ResourceName))
+                            thisConverterEfficiency.Add(resourceRatio.ResourceName, resourceRatio.Ratio);
+                        else
+                            ShowError(part, "resourceRatio", resourceRatio.ResourceName);
+
                     }
-                    converterEfficiency.Add(converter.ConverterName, thisConverterEfficiency);
+                    if (!converterEfficiency.ContainsKey(converter.ConverterName))
+                        converterEfficiency.Add(converter.ConverterName, thisConverterEfficiency);
+                    else
+                        ShowError(part, "ConverterName", converter.ConverterName);
                 }
             }
 
@@ -208,10 +231,23 @@ namespace KRnD
                 {
                     PartResource fuelResource = fuelResources[i];
 
-                    fuelCapacities.Add(fuelResource.resourceName, fuelResource.maxAmount);
-                    fuelCapacitiesSum += fuelResource.maxAmount;
+                    if (!fuelCapacities.ContainsKey(fuelResource.resourceName))
+                    {
+                        fuelCapacities.Add(fuelResource.resourceName, fuelResource.maxAmount);
+                        fuelCapacitiesSum += fuelResource.maxAmount;
+                    }
+                    else
+                    {
+                        ShowError(part, "fuelResource", fuelResource.resourceName);
+                    }
                 }
             }
+        }
+
+
+        void ShowError(Part part, string type, string resName)
+        {
+            Log.Error("Part: " + part.partInfo.title + " (" + part.partInfo.configFileFullName + ") contains multiple definitions for " + type + ": " + resName);
         }
     }
 }
