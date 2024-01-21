@@ -725,7 +725,7 @@ namespace KRnD
                 {
                     rndModule.radiatorEfficiency_upgrades = upgradesToApply.radiatorEfficiency;
                     double radiatorEfficiency = originalStats.radiatorEfficiency * (1 + KRnD.calculateImprovementFactor(rndModule.radiatorEfficiency_improvement, rndModule.radiatorEfficiency_improvementScale, upgradesToApply.radiatorEfficiency));
-                    radiatorEfficiency = Math.Round(radiatorEfficiency);// Don't want decimals
+                    radiatorEfficiency = Math.Round(radiatorEfficiency, 2);// Allow 2 decimals
                     activeRadiator.maxEnergyTransfer = radiatorEfficiency;
                 }
                 else
@@ -769,7 +769,7 @@ namespace KRnD
                 {
                     rndModule.batteryCharge_upgrades = upgradesToApply.batteryCharge;
                     double batteryCharge = originalStats.batteryCharge * (1 + KRnD.calculateImprovementFactor(rndModule.batteryCharge_improvement, rndModule.batteryCharge_improvementScale, upgradesToApply.batteryCharge));
-                    batteryCharge = Math.Round(batteryCharge); // We don't want half units of electric charge
+                    batteryCharge = Math.Round(batteryCharge, 2);// Allow 2 decimals
 
                     bool batteryIsFull = false;
                     if (electricCharge.amount == electricCharge.maxAmount) batteryIsFull = true;
@@ -867,7 +867,7 @@ namespace KRnD
                         if (!originalStats.fuelCapacities.ContainsKey(fuelResource.resourceName)) continue;
                         double originalCapacity = originalStats.fuelCapacities[fuelResource.resourceName];
                         double newCapacity = originalCapacity * improvementFactor;
-                        newCapacity = Math.Round(newCapacity); // We don't want half units of fuel
+                        newCapacity = Math.Round(newCapacity, 2);// Allow 2 decimals
 
                         bool tankIsFull = false;
                         if (fuelResource.amount == fuelResource.maxAmount) tankIsFull = true;

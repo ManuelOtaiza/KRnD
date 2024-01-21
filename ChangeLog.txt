@@ -1,5 +1,8 @@
 Changelog
 
+1.16.0.14
+	Changed rounding for radiatorEfficiency, batteryCharge, newCapacity to allow 2 decimal digits
+
 1.16.0.13 
 	Thanks to @tgerland for providing a small update for the blacklist, to block Universal Storage 2
 
